@@ -5,34 +5,32 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Booking extends Model
+class Booking_detail extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'guest_id',
+        'booking_id',
         'room_id',
-        'start_date',
-        'end_date',
-        'price_pay',
+        'unit_price',
+        'number_night',
     ];
 
     protected $casts = [
-        'start_date' => 'date',
-        'end_date' => 'date',
-        'price_pay' => 'float',
+        'unit_price' => 'float',
+        'number_night' => 'integer',
     ];
 
     /**
-     * Relationship with Guest
+     * Relación con Booking
      */
-    public function guest()
+    public function booking()
     {
-        return $this->belongsTo(Guest::class, 'guest_id');
+        return $this->belongsTo(Booking::class, 'booking_id');
     }
 
     /**
-     * Relationship with Room
+     * Relación con Room
      */
     public function room()
     {

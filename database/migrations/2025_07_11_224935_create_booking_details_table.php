@@ -11,27 +11,25 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bookings', function (Blueprint $table) {
+        Schema::create('booking_details', function (Blueprint $table) {
             $table->id();
-            // Relaciones
-            $table->unsignedBigInteger('guest_id');
-            $table->foreign('guest_id')
+            // Foreign key to bookings
+            $table->unsignedBigInteger('booking_id');
+            $table->foreign('booking_id')
                 ->references('id')
-                ->on('guests')
+                ->on('bookings')
                 ->onDelete('cascade');
 
+            // Foreign key to rooms
             $table->unsignedBigInteger('room_id');
             $table->foreign('room_id')
                 ->references('id')
                 ->on('rooms')
                 ->onDelete('cascade');
 
-            // Fechas de la reserva
-            $table->date('start_date');
-            $table->date('end_date');
-
-            // Precio total pagado
-            $table->decimal('price_pay', 10, 2);
+            // Precio y cantidad de noches
+            $table->decimal('unit_price', 10, 2);
+            $table->integer('number_night');
             $table->timestamps();
         });
     }
@@ -41,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bookings');
+        Schema::dropIfExists('booking_details');
     }
 };
