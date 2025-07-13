@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\Room_servicesExport;
 use App\Http\Controllers\Controller;
 use App\Models\Room_service;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -112,6 +113,6 @@ class Room_serviceController extends Controller
      */
     public function exportExcel()
     {
-        return Excel::download(new RoomServicesExport, 'reporte_servicios_habitacion.xlsx');
+        return Excel::download(new Room_servicesExport, 'reporte_servicios_habitacion.xlsx');
     }
 }

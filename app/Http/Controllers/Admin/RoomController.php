@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\RoomsExport;
 use App\Http\Controllers\Controller;
 use App\Models\Room;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RoomController extends Controller
 {
@@ -76,5 +79,17 @@ class RoomController extends Controller
 
         return redirect()->route('admin.room.index')
             ->with('success', 'La habitación fue eliminada correctamente.');
+    }
+
+    public function exportPdf()
+    {
+        $rooms = Room::where('status', true)->orderBy('number')->get();
+        $pdf = Pdf::loadView('admin.room.pdf', compact('rooms'));
+        return $pdf->download('reporte_habitaciones.pdf');
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new RoomsExport, 'reporte_habitaciones.xlsx');
     }
 }

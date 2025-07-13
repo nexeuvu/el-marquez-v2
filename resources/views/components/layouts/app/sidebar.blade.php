@@ -29,10 +29,61 @@
                         <flux:navlist.item icon="wrench-screwdriver"  :href="route('admin.service.index')" :current="request()->routeIs('admin.service.index')" wire:navigate>{{ __('Servicio') }}</flux:navlist.item>
                         <flux:navlist.item icon="document-text"  :href="route('admin.service_detail.index')" :current="request()->routeIs('admin.service_detail.index')" wire:navigate>{{ __('Detalle de Servicio') }}</flux:navlist.item>
                     </flux:navlist.group>
+                    <flux:navlist.item icon="user"  :href="route('admin.payment.index')" :current="request()->routeIs('admin.payment.index')" wire:navigate>{{ __('Pago') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
 
             <flux:spacer />
+
+            <!-- Sección de Notificaciones -->
+            @auth
+                <div class="px-4 py-2">
+                    <h3 class="text-sm font-semibold text-zinc-800 dark:text-zinc-200 mb-2">
+                        {{ __('Notificaciones') }}
+                    </h3>
+
+                    @if (Auth::user()->unreadNotifications->isEmpty())
+                        <p class="text-xs text-zinc-600 dark:text-zinc-400">
+                            {{ __('No hay notificaciones nuevas.') }}
+                        </p>
+                    @else
+                        <ul class="space-y-2">
+                            @foreach (Auth::user()->unreadNotifications->take(5) as $notification)
+                                <li class="flex items-start justify-between gap-2 p-3 bg-yellow-100 dark:bg-yellow-900 border border-yellow-300 dark:border-yellow-700 rounded text-xs">
+                                    <div class="flex items-start gap-2">
+                                        <svg class="w-5 h-5 text-yellow-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01" />
+                                        </svg>
+                                        <span class="text-zinc-800 dark:text-zinc-200">
+                                            {{ $notification->data['message'] }}
+                                        </span>
+                                    </div>
+
+                                    <!-- Botón para marcar como leída -->
+                                    <form action="{{ route('admin.notifications.markAsRead', $notification->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" title="Marcar como leída">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600 hover:text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </li>
+                            @endforeach
+                        </ul>
+
+                        <!-- Botón para marcar todas como leídas -->
+                        <form action="{{ route('admin.notifications.markAllAsRead') }}" method="POST" class="mt-3 text-right">
+                            @csrf
+                            <button type="submit" class="text-xs text-blue-500 hover:underline">
+                                {{ __('Marcar todas como leídas') }}
+                            </button>
+                        </form>
+                    @endif
+                </div>
+            @endauth
+
 
             <flux:navlist variant="outline">
                 <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">

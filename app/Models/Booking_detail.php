@@ -26,7 +26,7 @@ class Booking_detail extends Model
      */
     public function booking()
     {
-        return $this->belongsTo(Booking::class, 'booking_id');
+        return $this->belongsTo(Booking::class);
     }
 
     /**
@@ -34,6 +34,6 @@ class Booking_detail extends Model
      */
     public function room()
     {
-        return $this->belongsTo(Room::class, 'room_id');
+        return $this->belongsTo(Room::class);
     }
 }

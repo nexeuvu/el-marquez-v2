@@ -38,4 +38,10 @@ class Booking extends Model
     {
         return $this->belongsTo(Room::class, 'room_id');
     }
+
+    // 🔧 Agrega esta relación para corregir el error
+    public function bookingDetails()
+    {
+        return $this->hasMany(Booking_detail::class);
+    }
 }

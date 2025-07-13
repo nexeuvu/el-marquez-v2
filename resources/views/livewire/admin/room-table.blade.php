@@ -37,6 +37,10 @@
     <div class="w-full bg-zinc-900 rounded-xl shadow-2xl overflow-hidden p-6 border border-zinc-800">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-white">Lista de Habitaciones</h1>
+            <div class="space-x-2">
+                <a href="{{ route('admin.room.export-pdf') }}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Exportar PDF</a>
+                <a href="{{ route('admin.room.export-excel') }}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Exportar Excel</a>
+            </div>
         </div>
 
         <div class="overflow-x-auto">

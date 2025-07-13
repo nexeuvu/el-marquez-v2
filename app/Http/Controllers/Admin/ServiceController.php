@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\ServicesExport;
 use App\Http\Controllers\Controller;
 use App\Models\Service;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ServiceController extends Controller
 {
@@ -24,9 +27,9 @@ class ServiceController extends Controller
                 'name' => implode(', ', $request->name),
             ]);
         }
+
         $validator = Validator::make($request->all(), [
-            'name' => 'required|array|min:1',
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255', // <-- solo string aquí
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
         ]);
@@ -52,7 +55,6 @@ class ServiceController extends Controller
     public function update(Request $request, string $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|array|min:1',
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
@@ -84,5 +86,24 @@ class ServiceController extends Controller
 
         return redirect()->route('admin.service.index')
             ->with('success', 'El servicio fue eliminado correctamente.');
+    }
+
+    public function exportPdf()
+    {
+        // Obtener sin ordenar por 'name' directamente en SQL
+        $services = Service::all();
+
+        // Ordenar en memoria (PHP) si es necesario
+        $services = $services->sortBy(function ($item) {
+            return is_array($item->name) ? implode(', ', $item->name) : $item->name;
+        });
+
+        $pdf = Pdf::loadView('admin.service.pdf', compact('services'));
+        return $pdf->download('reporte_servicios.pdf');
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new ServicesExport, 'reporte_servicios.xlsx');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\Booking_detailsExport;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Booking_detail;
@@ -50,7 +51,7 @@ class Booking_detailController extends Controller
      */
     public function exportExcel()
     {
-        return Excel::download(new BookingsExport, 'reporte_detalle_reservas.xlsx');
+        return Excel::download(new Booking_detailsExport, 'reporte_detalle_reservas.xlsx');
     }
 
     /**

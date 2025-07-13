@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\Service_detailsExport;
 use App\Http\Controllers\Controller;
 use App\Models\Service_detail;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -20,7 +21,7 @@ class Service_detailController extends Controller
     public function show($id)
     {
         $serviceDetail = Service_detail::with(['service', 'employee', 'booking'])->findOrFail($id);
-        return view('Admin.service-detail-show', compact('serviceDetail'));
+        return view('Admin.service_detail.index', ['showComponent' => true, 'detailId' => $id]);
     }
 
 
@@ -96,13 +97,32 @@ class Service_detailController extends Controller
 
     public function exportPdf()
     {
-        $details = Service_detail::with(['service', 'employee', 'booking'])->get();
-        $pdf = Pdf::loadView('admin.service_detail.pdf', compact('details'));
-        return $pdf->download('reporte_detalle_servicios.pdf');
+        try {
+            // Verifica que existan datos
+            $details = Service_detail::with(['service', 'employee', 'booking'])->get();
+            
+            if($details->isEmpty()) {
+                return back()->with('error', 'No hay datos para generar el reporte');
+            }
+
+            // Verifica que la vista exista
+            if (!view()->exists('admin.service_detail.pdf')) {
+                throw new \Exception("La vista del PDF no existe");
+            }
+
+            $pdf = Pdf::loadView('admin.service_detail.pdf', compact('details'));
+            
+            // Para debugging, puedes usar stream() primero
+            return $pdf->stream('reporte_detalle_servicios.pdf');
+            // Luego cambiar a download() cuando funcione
+            
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error al generar PDF: '.$e->getMessage());
+        }
     }
 
     public function exportExcel()
     {
-        return Excel::download(new ServiceDetailsExport, 'reporte_detalle_servicios.xlsx');
+        return Excel::download(new Service_detailsExport, 'reporte_detalle_servicios.xlsx');
     }
 }

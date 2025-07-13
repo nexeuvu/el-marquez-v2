@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\EmployeesExport;
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use Barryvdh\DomPDF\Facade\Pdf;
