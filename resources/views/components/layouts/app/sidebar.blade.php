@@ -14,8 +14,11 @@
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                    <flux:navlist.item icon="building-storefront"  :href="route('admin.room.index')" :current="request()->routeIs('admin.room.index')" wire:navigate>{{ __('Habitación') }}</flux:navlist.item>
                     <flux:navlist.item icon="users"  :href="route('admin.employee.index')" :current="request()->routeIs('admin.employee.index')" wire:navigate>{{ __('Empleado') }}</flux:navlist.item>
+                    <flux:navlist.group expandable heading="Habitación" class="hidden lg:grid">
+                        <flux:navlist.item icon="building-storefront"  :href="route('admin.room.index')" :current="request()->routeIs('admin.room.index')" wire:navigate>{{ __('Habitación') }}</flux:navlist.item>
+                        <flux:navlist.item icon="building-storefront"  :href="route('admin.room_service.index')" :current="request()->routeIs('admin.room_service.index')" wire:navigate>{{ __('Servicio de Habitación') }}</flux:navlist.item>
+                    </flux:navlist.group>
                     <flux:navlist.item icon="user"  :href="route('admin.guest.index')" :current="request()->routeIs('admin.guest.index')" wire:navigate>{{ __('Huesped') }}</flux:navlist.item>
                     
                     <flux:navlist.group expandable heading="Reserva" class="hidden lg:grid">

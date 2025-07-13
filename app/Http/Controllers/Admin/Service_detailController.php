@@ -17,6 +17,13 @@ class Service_detailController extends Controller
         return view('Admin.service_detail.index');
     }
 
+    public function show($id)
+    {
+        $serviceDetail = Service_detail::with(['service', 'employee', 'booking'])->findOrFail($id);
+        return view('Admin.service-detail-show', compact('serviceDetail'));
+    }
+
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [

@@ -28,8 +28,8 @@ class Service_detail extends Model
      * Relación con Service
      */
     public function service()
-    {
-        return $this->belongsTo(Service::class, 'service_id');
+    { 
+        return $this->belongsTo(Service::class); 
     }
 
     /**
@@ -37,7 +37,7 @@ class Service_detail extends Model
      */
     public function employee()
     {
-        return $this->belongsTo(Employee::class, 'employee_id');
+        return $this->belongsTo(Employee::class);
     }
 
     /**
@@ -45,6 +45,6 @@ class Service_detail extends Model
      */
     public function booking()
     {
-        return $this->belongsTo(Booking::class, 'booking_id');
+        return $this->belongsTo(Booking::class);
     }
 }
